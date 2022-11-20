@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# TODO: Rename the output file to have a .packet.h5 filename
+
 import argparse
 from pathlib import Path
 from subprocess import call
@@ -13,7 +15,8 @@ SUBDIR = 'packetized'
 
 def get_outpath(path: str):
     relpath = Path(path).relative_to(BASEDIR)
-    return Path(BASEDIR).joinpath('packetized', relpath).as_posix()
+    out_relpath = relpath.with_suffix('.packet.h5')
+    return Path(BASEDIR).joinpath('packetized', out_relpath).as_posix()
 
 
 def process(path: str):
@@ -25,7 +28,7 @@ def process(path: str):
     script = Path(sys.prefix).joinpath('bin/convert_rawhdf5_to_hdf5.py') \
                              .as_posix()
     cmd = f'time python3 {script} -i {path} -o {outpath}'
-    call(cmd, shell=True)
+    return call(cmd, shell=True)
 
 
 def main():
@@ -38,8 +41,8 @@ def main():
 
     with logger:
         for path in reader:
-            process(path)
-            logger.log(path)
+            retcode = process(path)
+            logger.log(f'{path} {retcode}')
 
 
 if __name__ == '__main__':

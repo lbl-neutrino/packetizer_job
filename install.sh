@@ -7,3 +7,5 @@ source pkt_venv/bin/activate
 
 pip install git+https://github.com/mjkramer/zeroworker.git#egg=zeroworker
 pip install larpix-control
+
+mkdir -p $PSCRATCH/logs.packetizer
