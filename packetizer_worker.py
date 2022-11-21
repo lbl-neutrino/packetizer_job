@@ -1,43 +1,59 @@
 #!/usr/bin/env python3
 
-# TODO: Rename the output file to have a .packet.h5 filename
-
 import argparse
 from pathlib import Path
+import shutil
 from subprocess import call
 import sys
 
-from zeroworker import LockfileListReader, LockfileListWriter
+# from zeroworker import LockfileListReader, LockfileListWriter
+from zeroworker import ZmqListReader, ZmqListWriter
 
 BASEDIR = '/global/cfs/cdirs/dune/www/data/Module2'
 SUBDIR = 'packetized'
+# GROUP = 'dune'
 
 
-def get_outpath(path: str):
+def get_outpath_(path, subdir: str) -> Path:
     relpath = Path(path).relative_to(BASEDIR)
     out_relpath = relpath.with_suffix('.packet.h5')
-    return Path(BASEDIR).joinpath('packetized', out_relpath).as_posix()
+    return Path(BASEDIR).joinpath(subdir, out_relpath)
 
 
-def process(path: str):
-    outpath = get_outpath(path)
-    Path(outpath).parent.mkdir(parents=True, exist_ok=True)
+def get_outpath(path) -> Path:
+    return get_outpath_(path, SUBDIR)
+
+
+def get_tmppath(path) -> Path:
+    return get_outpath_(path, SUBDIR+'.tmp')
+
+
+def process(path):
+    tmppath = get_tmppath(path)
+    tmppath.parent.mkdir(parents=True, exist_ok=True)
+    tmppath.unlink(missing_ok=True) # don't want to append!
 
     # HACK: convert_rawhdf5_to_hdf5.py doesn't have a #! line
     # so we have to pass its path to python
-    script = Path(sys.prefix).joinpath('bin/convert_rawhdf5_to_hdf5.py') \
-                             .as_posix()
-    cmd = f'time python3 {script} -i {path} -o {outpath}'
-    return call(cmd, shell=True)
+    script = Path(sys.prefix).joinpath('bin/convert_rawhdf5_to_hdf5.py')
+    cmd = f'time python3 {script} -i {path} -o {tmppath}'
+    retcode = call(cmd, shell=True)
+
+    if retcode == 0:
+        outpath = get_outpath(path)
+        outpath.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(tmppath, outpath)
+
+    return retcode
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('infile')
+    ap.add_argument('sockdir')
     args = ap.parse_args()
 
-    reader = LockfileListReader(args.infile)
-    logger = LockfileListWriter(args.infile + '.done')
+    reader = ZmqListReader(args.sockdir)
+    logger = ZmqListWriter(args.sockdir)
 
     with logger:
         for path in reader:

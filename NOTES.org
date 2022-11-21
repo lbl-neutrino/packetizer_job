@@ -1,0 +1,6 @@
+* Some awful command lines
+#+begin_src bash
+while true; do clear; du -h --max-depth=1 /global/cfs/cdirs/dune/www/data/Module2/packetized; cat input.txt.done | awk '$3 == 0 {print $2}' | sed 's!Module2!Module2/packetized!' | sed 's/h5/packet.h5/' | xargs ls -lh | sed 's/:/0/' | sort -r -k 8; sleep 30; done
+
+for f in $(awk '$3 == 0 {print $2}' input.txt.done); do fout_tmp=$(echo $f | sed 's!Module2!Module2/packetized!' | sed 's/h5$/packet.h5/'); fout=$(echo $fout_tmp | sed 's/packetized/packetized.good/'); mkdir -p $(dirname $fout); mv $fout_tmp $fout; done
+#+end_src
