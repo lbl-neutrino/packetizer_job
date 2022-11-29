@@ -13,6 +13,9 @@ BASEDIR = '/global/cfs/cdirs/dune/www/data/Module2'
 SUBDIR = 'packetized'
 # GROUP = 'dune'
 
+sys.stdout.reconfigure(line_buffering=True)
+sys.stderr.reconfigure(line_buffering=True)
+
 
 def get_outpath_(path, subdir: str) -> Path:
     relpath = Path(path).relative_to(BASEDIR)
@@ -29,6 +32,8 @@ def get_tmppath(path) -> Path:
 
 
 def process(path):
+    print(f'PROCESSING {path}')
+
     tmppath = get_tmppath(path)
     tmppath.parent.mkdir(parents=True, exist_ok=True)
     tmppath.unlink(missing_ok=True) # don't want to append!

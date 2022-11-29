@@ -8,7 +8,7 @@ module load python
 source pkt_venv/bin/activate
 
 sockdir=$(mktemp -d)
-zw_fan.py -c "$SLURM_NTASKS" "$sockdir" "$infile" &
+zw_fan.py --input-chunksize 8 --output-chunksize 1 "$sockdir" "$infile" &
 
 logdir=$PSCRATCH/logs.packetizer/$SLURM_JOBID
 mkdir -p "$logdir"

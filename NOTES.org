@@ -1,6 +1,35 @@
+* Duplicate files
+** Self-triggered
+- Stuff in =commission/from-homedir= and =TPC12=
+- Stuff in =commission/selftrigger-debug/Nov16= and =TPC12=
+- One file (=selftriggering-packet-2022_11_17_03_26_CET.h5=, 1.3GB) from =commission/selftrigger-debug/converted= in =commission/selftrigger-debug/Nov16=
+** Pedestal
+- Stuff in =commission/from-homedir= and =TPC12=
+- Stuff in =commission/selftrigger-debug/Nov16= and =commission/selftrigger-debug=
+  (These files all seem to be of the same size)
+- Stuff in =commission/selftrigger-debug/Nov16= and =TPC12=
+** Questions
+- Does =selftrigger-binary-2022_11_21_03_34_CET.h= show up in TPC12? Is someone copying files from =~/PACMANv1rev4/commission= to =/data/LArPix/Module2_Nov2022/TPC12=?
+
+* To do
+** Move truncated duplicates to =_trash=
+See list of duplicates above
+*** Also in =packetized=
+** Make symlinks in =packetized= to files that are already packetized
+From =commission=, =cooldown=, =TPC12=
+(Start with just TPC12... in progress)
+Remember to chmod
+** Submit =packetizer_job= for binary pedestal files
+** Reinitialize =packetizer_job= for self-triggered files
+*** Do a filesystem scan of =packetized= rather than using the =.done= file
+** Deal with files that raise an OSError in h5py.File
+=grep OSError /global/cfs/cdirs/dune/users/mkramer/data/packetizer/2022-11-27.pedestal/dumplog.txt=
+
 * Some awful command lines
 #+begin_src bash
 while true; do clear; du -h --max-depth=1 /global/cfs/cdirs/dune/www/data/Module2/packetized; cat input.txt.done | awk '$3 == 0 {print $2}' | sed 's!Module2!Module2/packetized!' | sed 's/h5/packet.h5/' | xargs ls -lh | sed 's/:/0/' | sort -r -k 8; sleep 30; done
 
 for f in $(awk '$3 == 0 {print $2}' input.txt.done); do fout_tmp=$(echo $f | sed 's!Module2!Module2/packetized!' | sed 's/h5$/packet.h5/'); fout=$(echo $fout_tmp | sed 's/packetized/packetized.good/'); mkdir -p $(dirname $fout); mv $fout_tmp $fout; done
+
+while true; do clear; find packetized -type f | wc -l; echo; du -h --max-depth=1 packetized.tmp; sleep 30; done
 #+end_src
