@@ -26,9 +26,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('srcdir')
     ap.add_argument('--really', action='store_true')
+    ap.add_argument('-g', '--glob', default='*.h5')
     args = ap.parse_args()
 
-    for p in Path(args.srcdir).rglob('*.h5'):
+    for p in Path(args.srcdir).rglob(args.glob):
         if is_packetized(p):
             reldir = p.parent
             destdir = Path(BASEDIR).joinpath(PACKETDIR, reldir)
