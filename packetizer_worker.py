@@ -19,7 +19,10 @@ sys.stderr.reconfigure(line_buffering=True)
 
 def get_outpath_(path, subdir: str) -> Path:
     relpath = Path(path).relative_to(BASEDIR)
-    out_relpath = relpath.with_suffix('.packet.h5')
+    if relpath.name.find('-binary-') != -1:
+        out_relpath = relpath.parent.joinpath(relpath.name.replace('-binary-', '-packet-'))
+    else:
+        out_relpath = relpath.with_suffix('.packet.h5')
     return Path(BASEDIR).joinpath(subdir, out_relpath)
 
 
@@ -32,11 +35,11 @@ def get_tmppath(path) -> Path:
 
 
 def process(path):
-    print(f'PROCESSING {path}')
-
     tmppath = get_tmppath(path)
     tmppath.parent.mkdir(parents=True, exist_ok=True)
     tmppath.unlink(missing_ok=True) # don't want to append!
+
+    print(f'PROCESSING {path} TO {tmppath}')
 
     # HACK: convert_rawhdf5_to_hdf5.py doesn't have a #! line
     # so we have to pass its path to python
