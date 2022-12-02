@@ -15,11 +15,11 @@ PACKETDIR = 'packetized'
 
 
 def is_packetized(path):
-    try:
-        f = h5py.File(path)
-        return ('packets' in f) and (len(f['packets']) > 0)
-    except:
-        return False
+    # try:
+    f = h5py.File(path)
+    return ('packets' in f) and (len(f['packets']) > 0)
+    # except:
+    #     return False
 
 
 def main():
