@@ -10,7 +10,7 @@ import sys
 from zeroworker import ZmqListReader, ZmqListWriter
 
 BASEDIR = '/global/cfs/cdirs/dune/www/data/Module2'
-SUBDIR = 'packetized'
+OUTDIR = 'packetized'
 # GROUP = 'dune'
 
 sys.stdout.reconfigure(line_buffering=True)
@@ -27,11 +27,11 @@ def get_outpath_(path, subdir: str) -> Path:
 
 
 def get_outpath(path) -> Path:
-    return get_outpath_(path, SUBDIR)
+    return get_outpath_(path, OUTDIR)
 
 
 def get_tmppath(path) -> Path:
-    return get_outpath_(path, SUBDIR+'.tmp')
+    return get_outpath_(path, OUTDIR+'.tmp')
 
 
 def process(path):

@@ -9,7 +9,7 @@ source load.sh
 sockdir=$(mktemp -d)
 zw_fan.py --input-chunksize 8 --output-chunksize 1 "$sockdir" "$infile" &
 
-logdir=$PSCRATCH/logs.packetizer/$SLURM_JOBID
+logdir=$SCRATCH/logs.packetizer/$SLURM_JOBID
 mkdir -p "$logdir"
 srun --no-kill --kill-on-bad-exit=0 -o "$logdir"/output-%j.%t.txt -- ./packetizer_worker.py "$sockdir"
 
