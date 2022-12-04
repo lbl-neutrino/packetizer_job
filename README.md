@@ -3,6 +3,7 @@
 Run `install.sh`, which will locally create the `pkt_venv` venv and install a
 few dependencies.
 
+
 # Grabbing a node
 
 Perlmutter:
@@ -23,6 +24,7 @@ Cori KNL:
 salloc -q interactive -A dune -C knl -t 240 --ntasks-per-node=272
 ```
 
+
 # Environment setup
 
 ``` bash
@@ -30,6 +32,7 @@ source load.sh
 ```
 
 Not necessary if you're just submitting batch jobs.
+
 
 # Interactive launching on a compute node
 
@@ -41,6 +44,7 @@ From a compute node provided by `salloc`:
 
 where `input.txt` contains a list of binary files to convert. The output
 directory is configured at the top of `packetizer_worker.py`.
+
 
 # Interactive launching on a login node
 
@@ -67,6 +71,7 @@ override them when calling `submit_packetizer.sh`.
 
 You can increase the amount of parallelism by asking for more nodes per job
 (`-N`) or by asking for more jobs (`--array`).
+
 
 # Preparing inputs
 
