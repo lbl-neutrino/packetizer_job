@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-#SBATCH -N 1 -n 256 -C cpu -L cfs
-#SBATCH -t 02:00:00 -A dune -q regular
+#SBATCH -N 1 --ntasks-per-node=256 -C cpu -L cfs
+#SBATCH -t 04:00:00 -A dune -q regular
 
 infile=$1; shift
 
-module load python
-source pkt_venv/bin/activate
+source load.sh
 
 sockdir=$(mktemp -d)
 zw_fan.py --input-chunksize 8 --output-chunksize 1 "$sockdir" "$infile" &
