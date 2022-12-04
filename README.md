@@ -6,6 +6,7 @@ few dependencies.
 
 # Grabbing a node
 
+
 Perlmutter:
 
 ``` bash
@@ -69,8 +70,8 @@ This calls `sbatch` to submit `packetizer_job.sh`. The latter has some
 Perlmutter-specific `SBATCH` directives, so if running on Cori, you will want to
 override them when calling `submit_packetizer.sh`.
 
-You can increase the amount of parallelism by asking for more nodes per job
-(`-N`) or by asking for more jobs (`--array`).
+You can increase the amount of parallelism by submitting a job array
+(`--array`).
 
 
 # Preparing inputs
