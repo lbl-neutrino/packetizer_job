@@ -88,4 +88,5 @@ logged into), and start up the `watch_folder.py` script in the background:
 ```
 
 This will write the paths of all h5 files within `/directory/to/monitor` to
-`input.txt`, and will update `input.txt` as new files arrive over rsync. Then follow the instructions above for interactive launching on a login node.
+`input.txt`, and will update `input.txt` as new files arrive over rsync. Then
+follow the instructions above for interactive launching on a login node.
