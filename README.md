@@ -63,7 +63,7 @@ exporting `NPROCS` to something larger, but be considerate.
 # Submitting batch jobs
 
 ``` bash
-./submit_calibizer.sh /path/to/input.txt [extra sbatch args...]
+./submit_packetizer.sh /path/to/input.txt [extra sbatch args...]
 ```
 
 This calls `sbatch` to submit `packetizer_job.sh`. The latter has some
@@ -74,6 +74,18 @@ You can increase the amount of parallelism by submitting a job array
 (`--array`).
 
 
-# Preparing inputs
+# Preparing batch inputs
 
 See the various scripts whose names begin with `dump_input`.
+
+# Continuous running
+
+SSH into Cori or Perlmutter, start a `screen` session (noting which node you are
+logged into), and start up the `watch_folder.py` script in the background:
+
+``` bash
+./watch_folder.py -i /directory/to/monitor -o /path/to/input.txt &
+```
+
+This will write the paths of all h5 files within `/directory/to/monitor` to
+`input.txt`, and will update `input.txt` as new files arrive over rsync. Then follow the instructions above for interactive launching on a login node.
