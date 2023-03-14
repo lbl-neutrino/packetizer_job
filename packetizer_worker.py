@@ -9,7 +9,7 @@ import sys
 # from zeroworker import LockfileListReader, LockfileListWriter
 from zeroworker import ZmqListReader, ZmqListWriter
 
-BASEDIR = '/global/cfs/cdirs/dune/www/data/Module3/run2'
+BASEDIR = '/global/cfs/cdirs/dune/www/data/Module3/run3'
 OUTDIR = 'packet'
 # GROUP = 'dune'
 

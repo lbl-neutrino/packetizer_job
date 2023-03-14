@@ -5,7 +5,7 @@ from pathlib import Path
 import time
 
 POLL_INTERVAL_SEC = 60
-MIN_AGE_SEC = 600
+MIN_AGE_SEC = 300
 
 def watch_folder(indir, outfile, min_age, poll_interval):
     items = set()
@@ -15,12 +15,14 @@ def watch_folder(indir, outfile, min_age, poll_interval):
 
     with open(outfile, 'a') as outf:
         while True:
-            for p in Path(indir).glob('*-binary-*.h5'):
+            for p in Path(indir).rglob('*-binary-*.h5'):
                 abspath = str(p.absolute())
 
                 if abspath in items:
                     continue
 
+                # NOTE: time.time() and st_mtime are both UNIX timestamps, so
+                # this subtraction is "valid" regardless of timezone.
                 if time.time() - p.stat().st_mtime < MIN_AGE_SEC:
                     continue
 
